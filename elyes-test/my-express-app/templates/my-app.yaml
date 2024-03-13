@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.expressApp.name }}-deployment
+spec:
+  replicas: {{ .Values.expressApp.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.expressApp.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.expressApp.name }}
+        access: allowed
+    spec:
+      containers:
+      - name: express-container
+        image: {{ .Values.expressApp.image }}
+        resources:
+          requests:
+            memory: {{ .Values.expressApp.resources.requests.memory }}
+            cpu: {{ .Values.expressApp.resources.requests.cpu }}
+          limits:
+            memory: {{ .Values.expressApp.resources.limits.memory }}
+            cpu: {{ .Values.expressApp.resources.limits.cpu }}
+        ports:
+        - containerPort: {{ .Values.service.targetPort }}
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.service.targetPort }}
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: {{ .Values.service.targetPort }}
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+      imagePullSecrets:
+      - name: dockerhub-secret

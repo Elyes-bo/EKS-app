@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-express-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: express-app
+  template:
+    metadata:
+      labels:
+        app: express-app
+        access: allowed
+    spec:
+      containers:
+      - name: express-container
+        image: elyes28/nuageup:latest
+        resources:
+          requests:
+            memory: "15Mi"
+            cpu: "250m"
+          limits:
+            memory: "20Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+      imagePullSecrets:
+      - name: dockerhub-secret

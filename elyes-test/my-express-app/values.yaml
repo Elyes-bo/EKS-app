@@ -1,0 +1,20 @@
+expressApp:
+  name: my-express
+  image: elyes28/nuageup:latest
+  replicas: 3
+  resources:
+    requests:
+      memory: "15Mi"
+      cpu: "250m"
+    limits:
+      memory: "20Mi"
+      cpu: "500m"
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 3000
+hpa:
+  minReplicas: 1
+  maxReplicas: 10
+  cpuUtilization: 50
+  memoryUtilization: 50
