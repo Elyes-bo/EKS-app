@@ -1,15 +1,16 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-labeled-pods
+  name: {{ .Values.networkPolicy.name }}
+  namespace: {{ .Values.networkPolicy.namespace }}
 spec:
   podSelector:
     matchLabels:
-      app: {{ .Values.expressApp.name }}
+      app: {{ .Values.networkPolicy.podSelector.app }}
   ingress:
   - from:
     - podSelector:
         matchLabels:
-          access: allowed
+          access: {{ .Values.networkPolicy.ingress.access }}
   policyTypes:
   - Ingress

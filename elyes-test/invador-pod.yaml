@@ -5,6 +5,7 @@ metadata:
   namespace: default
   labels:
     access: allowed
+    app: express-app
 spec:
   containers:
   - name: busybox

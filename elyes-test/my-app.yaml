@@ -14,8 +14,8 @@ spec:
         access: allowed
     spec:
       containers:
-      - name: express-container
-        image: elyes28/nuageup:latest
+      - name: app1-container
+        image: elyes28/nuageup:app1
         resources:
           requests:
             memory: "15Mi"

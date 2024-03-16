@@ -3,7 +3,8 @@ kind: Pod
 metadata:
   name: "{{ include "my-express-app.fullname" . }}-test-connection"
   labels:
-    {{- include "my-express-app.labels" . | nindent 4 }}
+  app: express-app
+  access: allowed
   annotations:
     "helm.sh/hook": test
 spec:
@@ -11,5 +12,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "my-express-app.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "my-express-app.fullname" . }}:80']
   restartPolicy: Never
