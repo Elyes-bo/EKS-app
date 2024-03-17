@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.expressDeployment.name }}
+spec:
+  replicas: {{ .Values.expressDeployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.expressDeployment.selector.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.expressDeployment.template.labels.app }}
+        access: {{ .Values.expressDeployment.template.labels.access }}
+    spec:
+      containers:
+      - name: {{ .Values.expressDeployment.template.containers.name }}
+        image: {{ .Values.expressDeployment.template.containers.image }}
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: {{ .Values.expressDeployment.template.containers.resources.requests.memory }}
+            cpu: {{ .Values.expressDeployment.template.containers.resources.requests.cpu }}
+          limits:
+            memory: {{ .Values.expressDeployment.template.containers.resources.limits.memory }}
+            cpu: {{ .Values.expressDeployment.template.containers.resources.limits.cpu }}
+        ports:
+        - containerPort: {{ .Values.expressDeployment.template.containers.ports.containerPort }}
+      imagePullSecrets:
+      - name: {{ .Values.expressDeployment.template.imagePullSecrets.name }}

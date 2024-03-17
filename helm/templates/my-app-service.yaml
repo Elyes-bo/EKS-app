@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.expressService.name }}
+spec:
+  type: {{ .Values.expressService.type }}
+  ports:
+  - port: {{ .Values.expressService.ports.port }}
+    targetPort: {{ .Values.expressService.ports.targetPort }}
+  selector:
+    app: {{ .Values.expressService.selector.app }}

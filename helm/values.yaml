@@ -1,0 +1,175 @@
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
+  behavior: {}
+
+networkPolicy:
+  name: allow-labeled-pods
+  namespace: default
+  podSelector:
+    app: express-app
+  ingress:
+    access: allowed
+  policyTypes:
+  - Ingress
+
+secondDeployment:
+  name: second-express-deployment
+  replicas: 1
+  selector:
+    app: second-express-app
+  template:
+    labels:
+      app: second-express-app
+    containers:
+      name: app2-container
+      image: elyes28/nuageup:app2
+      imagePullPolicy: Always
+      resources:
+        requests:
+          memory: "15Mi"
+          cpu: "250m"
+        limits:
+          memory: "20Mi"
+          cpu: "500m"
+      ports:
+        containerPort: 3000
+    imagePullSecrets:
+      name: dockerhub-secret
+
+secondService:
+  name: my-second-application-service
+  type: ClusterIP
+  ports:
+    port: 80
+    targetPort: 3000
+  selector:
+    app: second-express-app
+
+secondIngress:
+  name: my-second-application-ingress
+  ingressClassName: nginx
+  rules:
+    http:
+      paths:
+        path: /gaming
+        pathType: Prefix
+        backend:
+          service:
+            name: my-second-application-service
+            port:
+              number: 80
+
+expressDeployment:
+  name: my-express-deployment
+  replicas: 1
+  selector:
+    app: express-app
+  template:
+    labels:
+      app: express-app
+      access: allowed
+    containers:
+      name: app1-container
+      image: elyes28/nuageup:app1
+      resources:
+        requests:
+          memory: "15Mi"
+          cpu: "250m"
+        limits:
+          memory: "20Mi"
+          cpu: "2500m"
+      ports:
+        containerPort: 3000
+      livenessProbe:
+        httpGet:
+          path: /health
+          port: 3000
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        timeoutSeconds: 5
+        failureThreshold: 3
+      readinessProbe:
+        httpGet:
+          path: /readiness
+          port: 3000
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        timeoutSeconds: 3
+        failureThreshold: 3     
+    imagePullSecrets:
+      name: dockerhub-secret
+
+expressService:
+  name: my-express-application-service
+  type: ClusterIP
+  ports:
+    port: 80
+    targetPort: 3000
+  selector:
+    app: express-app
+
+expressIngress:
+  name: my-express-application-ingress
+  ingressClassName: nginx
+  rules:
+    http:
+      paths:
+        path: /fibonacci
+        pathType: Prefix
+        backend:
+          service:
+            name: my-express-application-service
+            port:
+              number: 80
+
+pod:
+  name: invador-pod
+  namespace: default
+  labels:
+    access: not-allowed
+    app: express-app-2
+  containers:
+    name: busybox
+    image: busybox
+    command: ["sleep", "3600"]
+
+hpa:
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-express-hpa
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-express-deployment
+  minReplicas: 1
+  maxReplicas: 10
+  behavior:
+    scaleUp:
+      policies:
+      - type: Pods
+        value: 1
+        periodSeconds: 30
+    scaleDown:
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 30
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 50
