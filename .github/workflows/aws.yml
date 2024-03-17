@@ -57,7 +57,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Update kubeconfig
         run: aws eks --region ${{ secrets.AWS_REGION }} update-kubeconfig --name Nuageup-kube 
-     - name: Create DockerHub secret for Kubernetes
+      - name: Create DockerHub secret for Kubernetes
         run: |
           kubectl create secret docker-registry dockerhub-secret \
             --docker-username=${{ secrets.DOCKER_USERNAME }} \
