@@ -63,13 +63,14 @@ jobs:
             --docker-username=${{ secrets.DOCKER_USERNAME }} \
             --docker-password=${{ secrets.DOCKER_PASSWORD }} \
             --docker-email=bachq2@gmail.com  
+      - name: Deploy the ressources to EKS using Helm
+        run: |
+          helm upgrade --install helm ./helm --namespace default --create-namespace
       - name: Install or Upgrade ingress-nginx
         run: |
           helm upgrade --install ingress-nginx ingress-nginx \
             --repo https://kubernetes.github.io/ingress-nginx \
             --namespace ingress-nginx \
             --create-namespace        
-      - name: Deploy the ressources to EKS using Helm
-        run: |
-          helm upgrade --install helm ./helm --namespace default --create-namespace
+
 
