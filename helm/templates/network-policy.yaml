@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Values.networkPolicy.name }}
+  namespace: {{ .Values.networkPolicy.namespace }}
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ .Values.networkPolicy.podSelector.app }}
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          access: {{ .Values.networkPolicy.ingress.access }}
+  policyTypes:
+  - Ingress

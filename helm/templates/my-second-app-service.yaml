@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.secondService.name }}
+spec:
+  type: {{ .Values.secondService.type }}
+  ports:
+  - port: {{ .Values.secondService.ports.port }}
+    targetPort: {{ .Values.secondService.ports.targetPort }}
+  selector:
+    app: {{ .Values.secondService.selector.app }}
