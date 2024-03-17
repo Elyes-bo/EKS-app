@@ -37,4 +37,10 @@ app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
 
+const server = app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
+
+module.exports = { app, server };
+
 module.exports = app;
