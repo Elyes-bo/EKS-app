@@ -1,5 +1,4 @@
 const request = require('supertest');
-const app = require('./app'); // Make sure to export 'app' in your app.js file
 const { app, server } = require('./app'); // Import the server instance
 
 describe('App', () => {
