@@ -33,9 +33,7 @@ app.get('/readiness', (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+
 
 const server = app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
