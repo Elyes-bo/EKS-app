@@ -59,10 +59,13 @@ jobs:
         run: aws eks --region ${{ secrets.AWS_REGION }} update-kubeconfig --name Nuageup-kube 
       - name: Create DockerHub secret for Kubernetes
         run: |
+          if kubectl get secret dockerhub-secret; then
+            kubectl delete secret dockerhub-secret
+          fi
           kubectl create secret docker-registry dockerhub-secret \
             --docker-username=${{ secrets.DOCKER_USERNAME }} \
             --docker-password=${{ secrets.DOCKER_PASSWORD }} \
-            --docker-email=bachq2@gmail.com  
+            --docker-email=bachq2@gmail.com
       - name: Deploy the ressources to EKS using Helm
         run: |
           helm upgrade --install helm ./helm --namespace default --create-namespace
