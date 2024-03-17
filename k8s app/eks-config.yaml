@@ -1,0 +1,73 @@
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: Nuageup-kube
+  region: us-west-2
+  version: "1.25"
+
+availabilityZones: ["us-west-2a", "us-west-2b", "us-west-2c"]
+
+iam:
+  withOIDC: true # Enables IAM IODC provider
+  serviceAccounts:
+  - metadata:
+      name: cluster-autoscaler
+      namespace: kube-system
+      labels:
+        aws-usage: "determined-cluster-autoscaler"
+    attachPolicy:
+      Version: "2012-10-17"
+      Statement:
+      - Effect: Allow
+        Action:
+        - "autoscaling:DescribeAutoScalingGroups"
+        - "autoscaling:DescribeAutoScalingInstances"
+        - "autoscaling:DescribeLaunchConfigurations"
+        - "autoscaling:DescribeTags"
+        - "autoscaling:SetDesiredCapacity"
+        - "autoscaling:TerminateInstanceInAutoScalingGroup"
+        - "ec2:DescribeLaunchTemplateVersions"
+        - "ec2:DescribeInstanceTypes"
+        Resource: '*'
+
+nodeGroups:
+  - name: spot-ng-us-west-2a
+  #  ami: "auto"
+    instanceType: mixed
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 10
+    volumeSize: 50
+    volumeType: gp2
+    volumeEncrypted: true
+    iam:
+      attachPolicyARNs:
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+      withAddonPolicies:
+        imageBuilder: true
+        autoScaler: true
+        certManager: true
+        appMesh: true
+        ebs: true
+        fsx: true
+        efs: true
+        awsLoadBalancerController: true
+        xRay: true
+        cloudWatch: true
+    instancesDistribution:
+      onDemandPercentageAboveBaseCapacity: 0                                                                                                                                                                                     
+      instanceTypes:
+        - t3.xlarge
+        - t3.large
+      spotAllocationStrategy: "price-capacity-optimized"
+    tags:
+      k8s.io/cluster-autoscaler/enabled: 'true'
+      k8s.io/cluster-autoscaler/node-template/label/zone: 'us-west-2a'
+    labels:
+      lifecycle: Ec2Spot
+      zone: 'us-west-2a'
+    privateNetworking: true
+    availabilityZones: ["us-west-2a", "us-west-2b", "us-west-2c"]

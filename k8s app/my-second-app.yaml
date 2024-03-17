@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: second-express-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: second-express-app
+  template:
+    metadata:
+      labels:
+        app: second-express-app
+    spec:
+      containers:
+      - name: app2-container
+        image: elyes28/nuageup:app2
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "15Mi"
+            cpu: "250m"
+          limits:
+            memory: "20Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000    
+      imagePullSecrets:
+      - name: dockerhub-secret 
