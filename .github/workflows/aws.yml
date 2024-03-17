@@ -31,12 +31,7 @@ jobs:
       - run: docker push elyes28/nuageup:app1
       - run: docker build -t elyes28/nuageup:app2 ./src/app2
       - run: docker push elyes28/nuageup:app2
-      - name: Create DockerHub secret for Kubernetes
-        run: |
-          kubectl create secret docker-registry dockerhub-secret \
-            --docker-username=${{ secrets.DOCKER_USERNAME }} \
-            --docker-password=${{ secrets.DOCKER_PASSWORD }} \
-            --docker-email=bachq2@gmail.com
+
 
 
   lint-and-package-helm-charts:
@@ -62,6 +57,12 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Update kubeconfig
         run: aws eks --region ${{ secrets.AWS_REGION }} update-kubeconfig --name Nuageup-kube 
+      - name: Create DockerHub secret for Kubernetes
+        run: |
+          kubectl create secret docker-registry dockerhub-secret \
+            --docker-username=${{ secrets.DOCKER_USERNAME }} \
+            --docker-password=${{ secrets.DOCKER_PASSWORD }} \
+            --docker-email=bachq2@gmail.com  
       - name: Install or Upgrade ingress-nginx
         run: |
           helm upgrade --install ingress-nginx ingress-nginx \
