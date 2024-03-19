@@ -1,4 +1,3 @@
-Based on the provided GitHub Actions workflow and your project structure, here's an enhanced README that incorporates the testing, building, and deployment instructions, including details about the workflow and the use of Helm charts for deployment.
 
 ---
 
