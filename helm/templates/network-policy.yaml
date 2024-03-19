@@ -11,6 +11,9 @@ spec:
   - from:
     - podSelector:
         matchLabels:
-          access: {{ .Values.networkPolicy.ingress.access }}
+          access: allowed
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
   policyTypes:
   - Ingress
