@@ -26,7 +26,7 @@ Below are instruction on how to get our cluster running, further down is a CI/CD
 1. Clone the repository and navigate to the application directory:
 
    ```bash
-   git clone https://github.com/Elyes-bo/Ngup-test.git
+   git clone 
    cd Ngup-test/src/app1
    ```
 
