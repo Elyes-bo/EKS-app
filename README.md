@@ -126,6 +126,9 @@ The repository includes a GitHub Actions workflow for automated testing, buildin
 
 This workflow is triggered on push to the `main` branch and can also be manually dispatched.
 
+![image](https://github.com/Elyes-bo/Ngup-test/assets/159837090/9680def7-c789-4e98-aa27-42e2d5b21eb0)
+
+
 
 ## Repository Structure
 
