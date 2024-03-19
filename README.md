@@ -21,6 +21,14 @@ The main application (app1) is an Express.js web service with multiple endpoints
 
 Below are instruction on how to get our cluster running, further down is a CI/CD option that automates the entire process.
 
+## Repository Structure
+
+- `helm/`: Contains Helm chart templates and packaged charts.
+- `k8s-app/`: Original Kubernetes manifests (now superseded by Helm charts).
+- `src/`: Source code for the two applications, including Dockerfiles and test files.
+- `.github/workflows/`: CI/CD pipeline definitions for GitHub Actions.
+- `README.md`: Documentation for the repository.
+
 ## Local Development
 
 1. Clone the repository and navigate to the application directory:
@@ -129,13 +137,5 @@ This workflow is triggered on push to the `main` branch and can also be manually
 ![image](https://github.com/Elyes-bo/Ngup-test/assets/159837090/9680def7-c789-4e98-aa27-42e2d5b21eb0)
 
 
-
-## Repository Structure
-
-- `helm/`: Contains Helm chart templates and packaged charts.
-- `k8s-app/`: Original Kubernetes manifests (now superseded by Helm charts).
-- `src/`: Source code for the two applications, including Dockerfiles and test files.
-- `.github/workflows/`: CI/CD pipeline definitions for GitHub Actions.
-- `README.md`: Documentation for the repository.
 
 ---
