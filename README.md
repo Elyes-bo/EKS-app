@@ -112,7 +112,7 @@ Create a DockerHub secret to allow Kubernetes to pull images from the private Do
 kubectl create secret docker-registry dockerhub-secret \
   --docker-username=<your-dockerhub-username> \
   --docker-password=<your-dockerhub-password> \
-  --docker-email=bachq2@gmail.com
+  --docker-email=email@mail.com
 ```
 
 ## CI/CD Pipeline
