@@ -1,7 +1,7 @@
 
 ---
 
-# Nuageup EKS Application Deployment
+# EKS Application Deployment
 
 Note: this project was built using private credentials, private docker images and aws services , building this project requires specific ressources and secrets.
 
